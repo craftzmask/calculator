@@ -23,9 +23,16 @@ operatorKeys.forEach(operatorKey => {
       const operator = tokens.pop();
       const first = tokens.pop();
       const second = Number(digits.join(''));
-      tokens.push(operate(first, second, operator));
 
-      inputDisplay.textContent = tokens[0];
+      if (operator === '/' && second === 0) {
+        resultDisplay.textContent = '';
+        inputDisplay.textContent = 'Math Error';
+        digits = [];
+        return;
+      } else {
+        tokens.push(operate(first, second, operator));
+        inputDisplay.textContent = tokens[0];
+      }
     }
 
     tokens.push(operatorKey.dataset.key);
@@ -48,11 +55,15 @@ equalKey.addEventListener('click', e => {
     const operator = tokens.pop();
     const first = tokens.pop();
     const second = Number(digits.join(''));
-    tokens.push(operate(first, second, operator));
+    if (operator === '/' && second === 0) {
+      resultDisplay.textContent = '';
+      inputDisplay.textContent = 'Math Error';
+    } else {
+      tokens.push(operate(first, second, operator));
+      inputDisplay.textContent = tokens[0];
+      resultDisplay.textContent = `${first} ${operator} ${second} =`;
+    }
     digits = [];
-
-    inputDisplay.textContent = tokens[0];
-    resultDisplay.textContent = `${first} ${operator} ${second} =`;
   }
 });
 
