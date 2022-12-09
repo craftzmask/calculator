@@ -65,6 +65,7 @@ function operate(first, second, operator) {
     case '*':
       return first * second;
     case '/':
+      if (second === 0) return 0;
       return first / second;
   }
 }
