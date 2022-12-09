@@ -62,6 +62,14 @@ backspaceKey.addEventListener('click', e => {
   inputDisplay.textContent = Number(digits.join(''));
 });
 
+const dotKey = document.querySelector('.dot');
+dotKey.addEventListener('click', e => {
+  if (!digits.includes('.')) {
+    digits.push('.');
+    inputDisplay.textContent += '.';
+  }
+});
+
 function operate(first, second, operator) {
   switch (operator) {
     case '+':
