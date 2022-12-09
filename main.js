@@ -1,67 +1,58 @@
-const keys = document.querySelectorAll('.key');
-const inputDisplay = document.querySelector('.input');
-const resultDisplay = document.querySelector('.result');
-
 let digits = [];   // store entered digits from the numeric buttons
 const tokens = []; // store tokens to calculate
 
-keys.forEach(key => {
-  // Update the input display
-  const keyValue = key.dataset.key;
+const inputDisplay = document.querySelector('.input');
+const resultDisplay = document.querySelector('.result');
 
-  if (keyValue >= '0' && keyValue <= '9') {
-    key.addEventListener('click', e => {
-      digits.push(keyValue);
-      inputDisplay.textContent = Number(digits.join(''));
-    });
-  }
+const numericKeys = document.querySelectorAll('.numeric');
+numericKeys.forEach(numericKey => {
+  numericKey.addEventListener('click', e => {
+    digits.push(numericKey.dataset.key);
+    inputDisplay.textContent = Number(digits.join(''));
+  });
+});
 
-  // Clear input
-  if (keyValue === 'ac') {
-    key.addEventListener('click', e => {
-      digits = [];
-      inputDisplay.textContent = Number(digits.join(''));
-    })
-  }
+const operatorKeys = document.querySelectorAll('.operator');
+operatorKeys.forEach(operatorKey => {
+  operatorKey.addEventListener('click', e => {
+    if (tokens.length === 0) {
+      tokens.push(Number(digits.join('')));
+    }
 
-  // Equal logic
-  if (keyValue === '=') {
-    key.addEventListener('click', e => {
-      if (tokens.length === 2 && digits.length !== 0) {
-        const operator = tokens.pop();
-        const first = tokens.pop();
-        const second = Number(digits.join(''));
-        tokens.push(operate(first, second, operator));
-        digits = [];
+    if (tokens.length === 2 && digits.length !== 0) {
+      const operator = tokens.pop();
+      const first = tokens.pop();
+      const second = Number(digits.join(''));
+      tokens.push(operate(first, second, operator));
 
-        inputDisplay.textContent = tokens[0];
-        resultDisplay.textContent = `${first} ${operator} ${second} =`;
-      }
-    });
-  }
+      inputDisplay.textContent = tokens[0];
+    }
 
-  // Handle logic when a operator button clicked
-  if (['+', '-', '*', '/'].includes(keyValue)) {
-    key.addEventListener('click', e => {
+    tokens.push(operatorKey.dataset.key);
+    digits = [];
 
-      if (tokens.length === 0) {
-        tokens.push(Number(digits.join('')));
-      }
+    resultDisplay.textContent = `${tokens[0]} ${tokens[1]}`;
+  });
+});
 
-      if (tokens.length === 2 && digits.length !== 0) {
-        const operator = tokens.pop();
-        const first = tokens.pop();
-        const second = Number(digits.join(''));
-        tokens.push(operate(first, second, operator));
+const clearKey = document.querySelector('.ac');
+clearKey.addEventListener('click', e => {
+  digits = [];
+  inputDisplay.textContent = Number(digits.join(''));
+  resultDisplay.textContent = '';
+});
 
-        inputDisplay.textContent = tokens[0];
-      }
+const equalKey = document.querySelector('.equal');
+equalKey.addEventListener('click', e => {
+  if (tokens.length === 2 && digits.length !== 0) {
+    const operator = tokens.pop();
+    const first = tokens.pop();
+    const second = Number(digits.join(''));
+    tokens.push(operate(first, second, operator));
+    digits = [];
 
-      tokens.push(keyValue);
-      digits = [];
-
-      resultDisplay.textContent = `${tokens[0]} ${tokens[1]}`;
-    });
+    inputDisplay.textContent = tokens[0];
+    resultDisplay.textContent = `${first} ${operator} ${second} =`;
   }
 });
 
