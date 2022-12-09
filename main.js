@@ -56,6 +56,12 @@ equalKey.addEventListener('click', e => {
   }
 });
 
+const backspaceKey = document.querySelector('.backspace');
+backspaceKey.addEventListener('click', e => {
+  digits.pop();
+  inputDisplay.textContent = Number(digits.join(''));
+});
+
 function operate(first, second, operator) {
   switch (operator) {
     case '+':
